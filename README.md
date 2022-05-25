@@ -7,6 +7,16 @@ Encrypted access control uses proxy re-encryption to grant access to encrypted d
 
 ## EAC Server
 
+HTTP server written using express.js, supporting following endpoints
+
+- `POST /data` : store encrypted data on the google cloud
+    - Body : `{"data" : "<base64_encoded_data>"}`
+- `GET /data` : get uids of the the data stored.
+- `GET /data/{id}/access` : get public key of the users who has access to a give data.
+- `POST /data/{id}/grant_access` : grant access to a public key
+    - Body : `{"pub_key" : "pub_key_of_recipient"}`
+- `GET /data/{id}` : get data for a given uid
+
 ## EAC CLI
 
 ### CLI configuration
@@ -32,21 +42,10 @@ location of configuration can be provided using:
     - `msg` : string message to be encrypted
     - `output` : location of output file
     - Example: `eac enc --msg "hello this Encrypted-Access-Control" --output ./data/hello`
-- `save` : send encrypted data to the server for it be stored in google cloud. arguments
-    - `data` : location of encrypted data
-    - on success it returns `uid` of the data stored on the cloud
-    - Example : `eac save --data ./data/hello`
-- `list-data` : list of the `uids` of data stored by the user
-    - returns `uids`
-    - Example : `eac list-data`
 - `grant-access` : grant access to an user, arguments
     - `pub` : public key of the recipient.
     - `id` : uid of the data.
     - Example : `enc grant-access --id <data_uid> --pub <pub_of_recipient>`
-- `list-access` : get list of public key to which access it been given for a data. Arguments
-    - `id` : uid of the data
-    - Return, list of public keys
-    - Example : `eac list-access --id <uid_of_data>`
 - `view-data` : recipient user calls this command to view the content of the data
     - `id` : uid of the data
     - Return, original message
